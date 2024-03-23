@@ -66,6 +66,22 @@ def test_update_user(client):
     }
 
 
+def test_user_id_read(client):
+    response = client.get('/users/1')
+    assert response.status_code == 200
+    assert response.json() == {
+        'username': 'bob',
+        'email': 'bob@example.com',
+        'id': 1,
+    }
+
+
+def test_invalid_user_id_read(client):
+    response = client.get('/users/-1')
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'User not found'}
+
+
 def test_invalid_delete_user(client):
     response = client.delete('/users/-1')
 
