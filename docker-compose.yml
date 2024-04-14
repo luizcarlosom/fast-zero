@@ -3,8 +3,6 @@ version: '3'
 services:
   fastzero_database:
     image: postgres
-    env_file:
-      - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
@@ -17,9 +15,9 @@ services:
   fastzero_app:
     image: fastzero_app
     entrypoint: ./entrypoint.sh
-    build: .
-    env_file:
-      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     depends_on:

@@ -1,21 +1,18 @@
 """create todos table
 
-Revision ID: bddc7608dafa
-Revises: ed48ff24b161
-Create Date: 2024-04-09 20:18:44.335838
+Revision ID: de865434f506
+Revises: e018397cecf4
+Create Date: 2023-07-14 20:44:12.961324
 
 """
-from typing import Sequence, Union
-
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = 'bddc7608dafa'
-down_revision: Union[str, None] = 'ed48ff24b161'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+revision = 'de865434f506'
+down_revision = 'e018397cecf4'
+branch_labels = None
+depends_on = None
 
 
 def upgrade() -> None:

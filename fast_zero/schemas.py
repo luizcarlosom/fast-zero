@@ -3,10 +3,6 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 from fast_zero.models import TodoState
 
 
-class Message(BaseModel):
-    message: str
-
-
 class UserSchema(BaseModel):
     username: str
     email: EmailStr
@@ -24,6 +20,10 @@ class UserList(BaseModel):
     users: list[UserPublic]
 
 
+class Message(BaseModel):
+    detail: str
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -39,14 +39,11 @@ class TodoSchema(BaseModel):
     state: TodoState
 
 
-class TodoPublic(BaseModel):
+class TodoPublic(TodoSchema):
     id: int
-    title: str
-    description: str
-    state: TodoState
 
 
-class TodoList(BaseModel):
+class ListTodos(BaseModel):
     todos: list[TodoPublic]
 
 

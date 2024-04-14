@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 from fast_zero.database import get_session
 from fast_zero.models import Todo, User
 from fast_zero.schemas import (
+    ListTodos,
     Message,
-    TodoList,
     TodoPublic,
     TodoSchema,
     TodoUpdate,
@@ -36,7 +36,7 @@ def create_todo(todo: TodoSchema, user: CurrentUser, session: Session):
     return db_todo
 
 
-@router.get('/', response_model=TodoList)
+@router.get('/', response_model=ListTodos)
 def list_todos(
     session: Session,
     user: CurrentUser,
@@ -62,6 +62,21 @@ def list_todos(
     return {'todos': todos}
 
 
+@router.delete('/{todo_id}', response_model=Message)
+def delete_todo(todo_id: int, session: Session, user: CurrentUser):
+    todo = session.scalar(
+        select(Todo).where(Todo.user_id == user.id, Todo.id == todo_id)
+    )
+
+    if not todo:
+        raise HTTPException(status_code=404, detail='Task not found.')
+
+    session.delete(todo)
+    session.commit()
+
+    return {'detail': 'Task has been deleted successfully.'}
+
+
 @router.patch('/{todo_id}', response_model=TodoPublic)
 def patch_todo(
     todo_id: int, session: Session, user: CurrentUser, todo: TodoUpdate
@@ -81,18 +96,3 @@ def patch_todo(
     session.refresh(db_todo)
 
     return db_todo
-
-
-@router.delete('/{todo_id}', response_model=Message)
-def delete_todo(todo_id: int, session: Session, user: CurrentUser):
-    todo = session.scalar(
-        select(Todo).where(Todo.user_id == user.id, Todo.id == todo_id)
-    )
-
-    if not todo:
-        raise HTTPException(status_code=404, detail='Task not found.')
-
-    session.delete(todo)
-    session.commit()
-
-    return {'message': 'Task has been deleted successfully.'}
